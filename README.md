@@ -53,7 +53,7 @@ doesn't work with modern versions of Haskell.
 Let's give up on Gosper's series and try Lambert's expression instead.
 
 This time, to get a baseline to work against, I started by copy-pasting the
-Haskell code from the paper into `ghci`;
+Haskell code from the paper into `ghci`:
 
 ```
 ghci> intercalate ", " (map show $ take 50 piL)
@@ -71,7 +71,7 @@ Lamberts.pi.take(10).toList
 
 Hmmmmmm..... time to start debugging.
 
-At least this time I know the Scala code works, so I can compare my
+At least this time I know the Haskell code works, so I can compare my
 implementation with that, one function at a time.
 
 Fixed a couple of bugs in BigDecimal rounding and usage of fs2 Pull, and
