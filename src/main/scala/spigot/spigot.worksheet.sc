@@ -86,7 +86,7 @@ object Lamberts:
     )
   }
 
-  val init: (LFT, BigInt) = (
+  val init: State = (
     (BigInt(0), BigInt(4), BigInt(1), BigInt(0)),
     BigInt(1)
   )
@@ -112,21 +112,28 @@ object Lamberts:
 
   val pi = stream(next.tupled, safe, prod, cons, init, lfts)
 
-Lamberts.pi.take(20).toList
-
-Lamberts.pi.drop(90).take(10).toList
-
-Lamberts.pi.drop(1000).take(10).toList
-
 object Gospers:
   /*
-   * Listing on page 9 of the paper:
+   * Listing on page 9 of the paper, which contains a typo:
    *
   piG = stream next safe prod cons init lfts where
     init                 = ((1,0,0,1), 1)
     lfts                 = [let j = 3*(3*i+1)*(3*i+2)
                             in (i*(2*i-1),j*(5*i-2),0,j) | i<-[1..]]
     next ((q,r,s,t),i)   = div (q*x+5*r) (s*x+5*t) where x = 27*i+15
+    safe ((q,r,s,t),i) n = (n == div (q*x+125*r) (s*x+125*t))
+                           where x=675*i-216
+    prod (z,i) n         = (comp (10, -10*n, 0, 1) z, i)
+    cons (z,i) z'        = (comp z z', i+1)
+
+   *
+   * With the typo in `next` fixed:
+   *
+  piG = stream next safe prod cons init lfts where
+    init                 = ((1,0,0,1), 1)
+    lfts                 = [let j = 3*(3*i+1)*(3*i+2)
+                            in (i*(2*i-1),j*(5*i-2),0,j) | i<-[1..]]
+    next ((q,r,s,t),i)   = div (q*x+5*r) (s*x+5*t) where x = 27*i-12
     safe ((q,r,s,t),i) n = (n == div (q*x+125*r) (s*x+125*t))
                            where x=675*i-216
     prod (z,i) n         = (comp (10, -10*n, 0, 1) z, i)
@@ -147,11 +154,11 @@ object Gospers:
 
   val unit: LFT = (BigInt(1), BigInt(0), BigInt(0), BigInt(1))
 
-  val init: (LFT, BigInt) = (unit, BigInt(1))
+  val init: State = (unit, BigInt(1))
 
   def next(qrst: LFT, i: BigInt): BigInt =
     val (q, r, s, t) = qrst
-    val x = 27 * i + 15
+    val x = 27 * i - 12 // Note: not 27*1+15 like in the paper
     (q*x + 5*r) / (s*x + 5*t) 
 
   def safe(qrst: LFT, i: BigInt)(n: BigInt): Boolean =
@@ -167,4 +174,16 @@ object Gospers:
 
   val pi = stream(next.tupled, safe, prod, cons, init, lfts)
 
+Lamberts.pi.take(20).toList
+
+Lamberts.pi.drop(90).take(10).toList
+
+Lamberts.pi.drop(1000).take(10).toList
+
 Gospers.pi.take(20).toList
+
+Gospers.pi.drop(90).take(10).toList
+
+Gospers.pi.drop(1000).take(10).toList
+
+Gospers.pi.drop(10000).take(10).toList

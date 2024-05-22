@@ -100,3 +100,14 @@ Gospers.pi.take(20).toList
 ```
 
 A little more debugging to do...
+
+Apparently the paper contained a typo in the Haskell code for Gosper's series.
+Thank you to my colleague Daniel Manning for pointing it out.
+
+After fixing the typo, my implementation works like a charm:
+
+```scala
+Gospers.pi.take(20).toList
+// res3: List[BigInt] = List(3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7, 9, 3, 2, 3, 8, 4)
+```
+
